@@ -22,7 +22,7 @@ func createUser(user User) (err error) {
 	return nil
 }
 
-func getUserData(id string) (user User, err error) {
+func readUser(id string) (user User, err error) {
 	if id == "example-user-id" {
 		user = permanentData
 		return
@@ -31,15 +31,39 @@ func getUserData(id string) (user User, err error) {
 		return
 	}
 }
+func updateUser(user User) (err error) {
+	permanentData = user
+	return
+}
+
+func deleteUser() (err error) {
+	permanentData = User{}
+	return
+}
 
 func main() {
+	//デフォルト値の確認
 	fmt.Println("Default user data: ", permanentData)
+	//ユーザーデータの作成
 	userData := User{Name: "notch_man", Id: "example-user-id", Email: "notchman@example.com"}
+	//ユーザーの作成
 	createUser(userData)
+	//結果の確認
+	fmt.Println("Created user data: ", permanentData)
+	//ユーザーデータの読み出し（ハッピーパス）
+	getData, _ := readUser("example-user-id")
+	fmt.Println("Read user data: ", getData)
+	//ユーザーデータの読み出し（ネガティブパス）
+	getData2, err := readUser("example-user-id-2")
+	fmt.Println("Read user data: ", getData2)
+	fmt.Println("Read user data: ", err)
+	//更新用データの作成
+	//ユーザーデータの作成
+	updatedUserData := User{Name: "notch_man", Id: "example-user-id", Email: "notchman@example.jp"}
+	_ = updateUser(updatedUserData)
 	fmt.Println("Updated user data: ", permanentData)
-	getData, _ := getUserData("example-user-id")
-	fmt.Println("Updated user data: ", getData)
-	getData2, err := getUserData("example-user-id-2")
-	fmt.Println("Updated user data: ", getData2)
-	fmt.Println("Updated user data: ", err)
+
+	//データの削除
+	_ = deleteUser()
+	fmt.Println("Deleted user data: ", permanentData)
 }
