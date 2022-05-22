@@ -10,9 +10,6 @@ import (
 	_ "github.com/lib/pq"
 )
 
-type Result interface {
-}
-
 type Row interface {
 	Scan(...interface{}) error
 	Next() bool
@@ -50,7 +47,7 @@ func NewSqlHandler() *SqlHandler {
 	return sqlHandler
 }
 
-func (handler *SqlHandler) Execute(statement string, args ...interface{}) (Result, error) {
+func (handler *SqlHandler) Execute(statement string, args ...interface{}) (SqlResult, error) {
 	res := SqlResult{}
 	result, err := handler.Conn.Exec(statement, args...)
 	if err != nil {
