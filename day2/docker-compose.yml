@@ -1,0 +1,25 @@
+version: "3"
+services:
+  user-api:
+    build: 
+      context: ./app
+    working_dir: /go/src
+    depends_on:
+      - db
+    environment:
+      - "SQL_URL=postgres://db:5432/user?user=user&password=password&sslmode=disable"
+  db:
+    image: postgres:alpine
+    restart: unless-stopped
+    volumes:
+      - db:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=user
+      - TZ=Asia/Tokyo
+
+volumes:
+  db:
